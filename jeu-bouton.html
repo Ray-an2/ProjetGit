@@ -44,6 +44,72 @@
     <div id="zone-jeu">
         <button id="btn-fuyant">Convention stage</button>
     </div>
+    <script>
+        const zoneJeu = document.getElementById("zone-jeu");
+        const bouton = document.getElementById("btn-fuyant");
+        const boutonStart = document.getElementById("btn-start");
+        const timerEl = document.getElementById("timer");
+        const messageEl = document.getElementById("message");
 
+        let tempsRestant = 60;
+        let termine = false;
+        let partie = false;
+        let compteARebours = null;
+
+        function deplacerBouton() {
+            if (termine) {
+                return;
+            }
+
+            const maxX = zoneJeu.clientWidth - bouton.offsetWidth;
+            const maxY = zoneJeu.clientHeight - bouton.offsetHeight;
+
+            const x = Math.random() * maxX;
+            const y = Math.random() * maxY;
+
+            bouton.style.left = x + "px";
+            bouton.style.top = y + "px";
+        }
+
+        function finJeu(texte) {
+            termine = true;
+            partie = false;
+            clearInterval(compteARebours);
+            bouton.disabled = true;
+            boutonStart.disabled = false;
+            messageEl.textContent = texte;
+        }
+
+        bouton.addEventListener("mouseenter", deplacerBouton);
+        bouton.addEventListener("click", function () {
+            if (!partie || termine) {
+                return;
+            }
+            finJeu("Félicitation ! Tu as attrapé une convention, Cariou sera fière de toi.");
+        });
+
+        boutonStart.addEventListener("click", function () {
+            tempsRestant = 60;
+            termine = false;
+            partie = true;
+            timerEl.textContent = tempsRestant;
+            messageEl.textContent = "";
+            bouton.disabled = false;
+            boutonStart.disabled = true;
+            deplacerBouton();
+
+            clearInterval(compteARebours);
+            compteARebours = setInterval(function () {
+                tempsRestant--;
+                timerEl.textContent = tempsRestant;
+
+                if (tempsRestant <= 0) {
+                    finJeu("Temps écoulé ! Tu as perdu. Va en TAL !");
+                }
+            }, 1000);
+        });
+
+        bouton.disabled = true;
+    </script>
 </body>
 </html>
