@@ -1,0 +1,115 @@
+<!-- Auteur : Rayan BROSSARD -->
+<!-- Fonctionnalité : Cette page web permet de jouer au jeu du bouton qui se déplace aléatoirement sur la page -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Jeu du bouton</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        #zone-jeu {
+            position: relative;
+            width: 90vw;
+            max-width: 900px;
+            height: 450px;
+            border: 2px solid #333;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        #btn-fuyant {
+            position: absolute;
+            padding: 10px 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Attrape moi si tu peux !</h1>
+    <a href="main.html">Retour vers la page principal</a>
+    <h2>Description</h2>
+    <p>Tu es un étudiant en master informatique parcours TIIL-A, une convention de stage qui à la forme d'un bouton se déplace de manière aléatoire, ton objectif (si tu l'accepte) est d'attraper le bouton avant la fin du temps impartie. Sinon, tu es reparti pour redoubler ta M1.</p>
+    <h2>Règles</h2>
+    <ul>
+        <li>Le bouton est coder de manière aléatoire</li>
+        <li>Tu as 30 secondes pour attraper le bouton</li>
+        <li>Si tu es prêt, appuie sur le bouton "lancer la partie" pour commencer</li>
+    </ul>
+    <button id="btn-start">Lancer la partie</button>
+    <p>Temps restant : <span id="timer">30</span> secondes</p>
+    <p id="message"></p>
+    <div id="zone-jeu">
+        <button id="btn-fuyant">Convention stage</button>
+    </div>
+    <script>
+        const zoneJeu = document.getElementById("zone-jeu");
+        const bouton = document.getElementById("btn-fuyant");
+        const boutonStart = document.getElementById("btn-start");
+        const timerEl = document.getElementById("timer");
+        const messageEl = document.getElementById("message");
+
+        let tempsRestant = 30;
+        let termine = false;
+        let partie = false;
+        let compteARebours = null;
+
+        function deplacerBouton() {
+            if (termine) {
+                return;
+            }
+
+            const maxX = zoneJeu.clientWidth - bouton.offsetWidth;
+            const maxY = zoneJeu.clientHeight - bouton.offsetHeight;
+
+            const x = Math.random() * maxX;
+            const y = Math.random() * maxY;
+
+            bouton.style.left = x + "px";
+            bouton.style.top = y + "px";
+        }
+
+        function finJeu(texte) {
+            termine = true;
+            partie = false;
+            clearInterval(compteARebours);
+            bouton.disabled = true;
+            boutonStart.disabled = false;
+            messageEl.textContent = texte;
+        }
+
+        bouton.addEventListener("mouseenter", deplacerBouton);
+        bouton.addEventListener("click", function () {
+            if (!partie || termine) {
+                return;
+            }
+            finJeu("Félicitation ! Tu as attrapé une convention, Cariou sera fière de toi.");
+        });
+
+        boutonStart.addEventListener("click", function () {
+            tempsRestant = 30;
+            termine = false;
+            partie = true;
+            timerEl.textContent = tempsRestant;
+            messageEl.textContent = "";
+            bouton.disabled = false;
+            boutonStart.disabled = true;
+            deplacerBouton();
+
+            clearInterval(compteARebours);
+            compteARebours = setInterval(function () {
+                tempsRestant--;
+                timerEl.textContent = tempsRestant;
+
+                if (tempsRestant <= 0) {
+                    finJeu("Temps écoulé ! Tu as perdu. Va en TAL !");
+                }
+            }, 1000);
+        });
+        bouton.disabled = true;
+    </script>
+</body>
+</html>
