@@ -4,6 +4,10 @@ Le projet git est une page html interactif qui contient des boutons afin de navi
 
 Chaque collaborateur intégrera une page web qui contient une fonctionnalité qui lui plaît : 
 - main.html : page principal
+- grenouille.html : page de biographie sur les grenouilles
+- pieuvre-anneaux-bleus.html : page de biographie sur les pieuvres
+- jeu-bouton.html : page de mini-jeu
+- registration.html : page d'inscriptions (impossible)
 
 Collaborateurs : 
 - Lisa VERNOT  (M1 TIIL-A)
