@@ -10,7 +10,7 @@ Chaque collaborateur intégrera une page web qui contient une fonctionnalité qu
 - registration.html : page d'inscriptions (impossible)
 
 Collaborateurs : 
-- Lisa VERNOT  (M1 TIIL-A)
+- Lisa VENOT  (M1 TIIL-A)
 - Ewan DRONEAU (M1 TIIL-A)
 - Rayan BROSSARD (M1 TIIL-A)
 - Liutwin PIERNET (M1 TIIL-A)
