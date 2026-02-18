@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Création de compte</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    .container {
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        width: 350px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        text-align: center;
+    }
+
+    input {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+    }
+
+    button {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+        border: none;
+        border-radius: 6px;
+        background: #aaa;
+        color: white;
+        font-weight: bold;
+        cursor: not-allowed;
+    }
+
+    .avatar {
+        font-size: 40px;
+        margin-bottom: 10px;
+    }
+
+    .message {
+        font-size: 14px;
+        min-height: 50px;
+        margin-top: 10px;
+    }
+
+    .strength-bar {
+        height: 8px;
+        border-radius: 4px;
+        background: #eee;
+        margin-top: 10px;
+        overflow: hidden;
+    }
+
+    .strength-fill {
+        height: 100%;
+        width: 0%;
+        transition: width 0.3s ease;
+    }
+
+    .weak { background: #e53e3e; }
+    .medium { background: #ecc94b; }
+    .strong { background: #38a169; }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="avatar" id="avatar">😐</div>
+    <h2>Créer un compte</h2>
+
+    <input type="text" id="username" placeholder="Nom d'utilisateur">
+    <input type="password" id="password" placeholder="Mot de passe" disabled>
+
+    <div class="strength-bar">
+        <div class="strength-fill" id="strengthFill"></div>
+    </div>
+
+    <div class="message" id="message"></div>
+
+    <button disabled>Créer mon compte</button>
+</div>
+
+<script>
+const usernameInput = document.getElementById("username");
+const passwordInput = document.getElementById("password");
+const message = document.getElementById("message");
+const avatar = document.getElementById("avatar");
+const strengthFill = document.getElementById("strengthFill");
+
+// ----- Gestion du nom d'utilisateur -----
+usernameInput.addEventListener("input", () => {
+    const name = usernameInput.value.trim();
+
+    if (name.length === 0) {
+        passwordInput.disabled = true;
+        message.textContent = "On commence par le nom, champion.";
+        avatar.textContent = "😐";
+        return;
+    }
+
+    passwordInput.disabled = false;
+
+    // Taquineries selon le nom
+    if (name.length < 3) {
+        message.textContent = `"${name}" ? C’est un pseudo ou tu as appuyé par accident ?`;
+        avatar.textContent = "🤨";
+    }
+    else if (/^[A-Z][a-z]+$/.test(name)) {
+        message.textContent = `"${name}" ? Rassure-moi, c'est pas ton vrai prénom ?`;
+        avatar.textContent = "😏";
+    }
+    else if (/\d/.test(name)) {
+        message.textContent = `"${name}" ? Les chiffres, c’est pour faire mystérieux ?`;
+        avatar.textContent = "🙃";
+    }
+    else {
+        message.textContent = `"${name}"… intéressant. Bon, passons au mot de passe.`;
+        avatar.textContent = "🙂";
+    }
+});
+
+// ----- Gestion du mot de passe -----
+passwordInput.addEventListener("input", () => {
+    const value = passwordInput.value;
+    const name = usernameInput.value.trim();
+    let score = 0;
+    let feedback = "";
+
+    const hasLower = /[a-z]/.test(value);
+    const hasUpper = /[A-Z]/.test(value);
+    const hasNumber = /\d/.test(value);
+    const hasSpecial = /[^A-Za-z0-9]/.test(value);
+
+    if (value.length >= 8) score++;
+    if (hasLower) score++;
+    if (hasUpper) score++;
+    if (hasNumber) score++;
+    if (hasSpecial) score++;
+
+    if (value.length === 0) {
+        feedback = `${name}, je te regarde taper...`;
+        avatar.textContent = "😐";
+    }
+    else if (value.length < 6) {
+        feedback = `"${value}" ? Vraiment ${name} ? Mon chat peut deviner ça.`;
+        avatar.textContent = "🙄";
+    }
+    else if (value.length > 20) {
+        feedback = "Calme-toi, c'est un compte de démo, pas les codes nucléaires.";
+        avatar.textContent = "😵";
+    }
+    else if (!hasUpper) {
+        feedback = `${name}, les majuscules ne mordent pas.`;
+        avatar.textContent = "🤨";
+    }
+    else if (!hasNumber) {
+        feedback = `${name}, les chiffres existent, promis.`;
+        avatar.textContent = "😏";
+    }
+    else if (!hasSpecial) {
+        feedback = "Un petit symbole ne ferait pas de mal.";
+        avatar.textContent = "😬";
+    }
+    else {
+        feedback = `Bon ${name}… techniquement c'est solide. Mais je ne valide toujours pas.`;
+        avatar.textContent = "😎";
+    }
+
+    updateStrength(score);
+    message.textContent = feedback;
+});
+
+// ----- Barre de force -----
+function updateStrength(score) {
+    let percent = (score / 5) * 100;
+    strengthFill.style.width = percent + "%";
+
+    strengthFill.className = "strength-fill";
+    if (score <= 2) strengthFill.classList.add("weak");
+    else if (score <= 4) strengthFill.classList.add("medium");
+    else strengthFill.classList.add("strong");
+}
+</script>
+
+</body>
+</html>
