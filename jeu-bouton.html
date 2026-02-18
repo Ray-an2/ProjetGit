@@ -36,10 +36,11 @@
     <h2>Règles</h2>
     <ul>
         <li>Le bouton est coder de manière aléatoire</li>
-        <li>Tu as 60 secondes pour attraper le bouton</li>
+        <li>Tu as 30 secondes pour attraper le bouton</li>
+        <li>Si tu es prêt, appuie sur le bouton "lancer la partie" pour commencer</li>
     </ul>
     <button id="btn-start">Lancer la partie</button>
-    <p>Temps restant : <span id="timer">60</span> secondes</p>
+    <p>Temps restant : <span id="timer">30</span> secondes</p>
     <p id="message"></p>
     <div id="zone-jeu">
         <button id="btn-fuyant">Convention stage</button>
@@ -51,7 +52,7 @@
         const timerEl = document.getElementById("timer");
         const messageEl = document.getElementById("message");
 
-        let tempsRestant = 60;
+        let tempsRestant = 30;
         let termine = false;
         let partie = false;
         let compteARebours = null;
@@ -89,7 +90,7 @@
         });
 
         boutonStart.addEventListener("click", function () {
-            tempsRestant = 60;
+            tempsRestant = 30;
             termine = false;
             partie = true;
             timerEl.textContent = tempsRestant;
@@ -108,7 +109,6 @@
                 }
             }, 1000);
         });
-
         bouton.disabled = true;
     </script>
 </body>
